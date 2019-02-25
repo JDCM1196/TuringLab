@@ -67,7 +67,7 @@ void Switch_Config(void){
 //Ref 3.3V
 void ADC0_Config(void){
 	SIM->SCGC6 |= SIM_SCGC6_ADC0_MASK;
-	ADC0->CFG1 = ADC_CFG1_MODE(1) + ADC_CFG1_ADLSMP_MASK + ADC_CFG1_ADICLK(0);  	//Clock/4 - short sample - 12 bits - Bus clk/2
+	ADC0->CFG1 = ADC_CFG1_MODE(1) + ADC_CFG1_ADLSMP_MASK + ADC_CFG1_ADICLK(0);  	//12 bit - short sample - 12 bits - Bus clk
 	ADC0->CFG2 = ADC_CFG2_MUXSEL_MASK + ADC_CFG2_ADLSTS(2); 						//High Speed, ADCB - Clk enable
 	ADC0->SC2 = 0x00;																//Software trigger
 	ADC0->SC3 = ADC_SC3_ADCO_MASK + ADC_SC3_AVGE_MASK + ADC_SC3_AVGS(2);			//Continuos conversions - Hardware Average - 16 samples
@@ -105,8 +105,8 @@ void UART0_Config(void){
 	PORTB->PCR[17] = (PORT_PCR_DSE_MASK  | PORT_PCR_SRE_MASK | PORT_PCR_MUX(3));
 	UART0->C2 &= (uint8_t)~(uint8_t)((UART_C2_TE_MASK | UART_C2_RE_MASK));
 	UART0->BDH = UART_BDH_SBR(0x00);																	// 115200 Bauds	
-	UART0->BDL = UART_BDL_SBR(0x27);	
-	UART0->C4 = UART_C4_BRFA(0x02);
+	UART0->BDL = UART_BDL_SBR(0x27);																	//Uses system clock (72MHz)
+	UART0->C4 = UART_C4_BRFA(0x02);				
 	UART0->C1 = UART_C1_ILT_MASK;
 	//UART0->TWFIFO = 2; 																				// tx watermark, causes S1_TDRE to set
 	//UART0->RWFIFO = 2; 																				// rx watermark, causes S1_RDRF to set
@@ -115,37 +115,22 @@ void UART0_Config(void){
 	NVIC_EnableIRQ(UART0_RX_TX_IRQn);			
 }
 
-/*
-//Para módulo bluetooth, que ya no se usó
+
 void UART2_Config(void){
-	SIM->SCGC5 |= SIM_SCGC5_PORTD_MASK;
+	SIM->SCGC5 |= SIM_SCGC5_PORTE_MASK;
 	SIM->SCGC4 |= SIM_SCGC4_UART2_MASK; 
-	PORTD->PCR[2] = (PORT_PCR_PE_MASK | PORT_PCR_PS_MASK | PORT_PCR_PFE_MASK | PORT_PCR_MUX(3));
-	PORTD->PCR[3] = (PORT_PCR_DSE_MASK  | PORT_PCR_SRE_MASK | PORT_PCR_MUX(3));
+	PORTE->PCR[0] = (PORT_PCR_PE_MASK | PORT_PCR_PS_MASK | PORT_PCR_PFE_MASK | PORT_PCR_MUX(3));
+	PORTE->PCR[1] = (PORT_PCR_DSE_MASK  | PORT_PCR_SRE_MASK | PORT_PCR_MUX(3));
 	UART2->C2 &= (uint8_t)~(uint8_t)((UART_C2_TE_MASK | UART_C2_RE_MASK));
-	UART2->BDH = UART_BDH_SBR(0x00);
-	UART2->BDL = UART_BDL_SBR(0xEA);																	//115200 bauds - 0x13, 9600 bauds - 0xEA
-	UART2->C4 = UART_C4_BRFA(0x0C);																		//115200 bauds - 0x11, 9600 bauds - 0x0C																										
+	UART2->BDH = UART_BDH_SBR(0x00);																	//Uses bus clock (36 MHz)
+	UART2->BDL = UART_BDL_SBR(0x13);																	//115200 bauds - 0x13, 9600 bauds - 0xEA
+	UART2->C4 = UART_C4_BRFA(0x11);																		//115200 bauds - 0x11, 9600 bauds - 0x0C																										
 	UART2->C1 = UART_C1_ILT_MASK;
 	//UART2->TWFIFO = 2; 																				// tx watermark, causes S1_TDRE to set
 	//UART2->RWFIFO = 2; 																				// rx watermark, causes S1_RDRF to set
 	//UART2->PFIFO = UART_PFIFO_TXFE_MASK | UART_PFIFO_RXFE_MASK;
 	UART2->C2 = (UART_C2_RIE_MASK | UART_C2_TE_MASK | UART_C2_RE_MASK);
 	NVIC_EnableIRQ(UART2_RX_TX_IRQn);			
-}*/
-
-void UART2_Config(void){
-	SIM->SCGC5 |= SIM_SCGC5_PORTE_MASK;
-	SIM->SCGC4 |= SIM_SCGC4_UART2_MASK;
-	PORTE->PCR[1] = (PORT_PCR_PE_MASK | PORT_PCR_PS_MASK | PORT_PCR_PFE_MASK | PORT_PCR_MUX(3));
-	PORTE->PCR[0] = (PORT_PCR_DSE_MASK  | PORT_PCR_SRE_MASK | PORT_PCR_MUX(3));
-	UART2->C2 &= (uint8_t)~(uint8_t)((UART_C2_TE_MASK | UART_C2_RE_MASK));
-	UART2->BDH = UART_BDH_SBR(0x00);
-	UART2->BDL = UART_BDL_SBR(0x42);																	//115200 bauds - 0x06, 9600 bauds - 0x42 		//with UART module clock 10.2 MHz	
-	UART2->C4 = UART_C4_BRFA(0x00);																		//¿No son 48MHz? Esa es la clock freq del USB FS Clock en run mode			
-	UART2->C1 = UART_C1_ILT_MASK;																			//¿No es hasta 25MHz? Es la freq del I2S master clock
-	UART2->C2 = (UART_C2_RIE_MASK | UART_C2_TE_MASK | UART_C2_RE_MASK); //Como sea, es el módulo MCG, con el MCGPLLCLK o el MCGFLLCLK
-	NVIC_EnableIRQ(UART2_RX_TX_IRQn);	
 }
 	
 //Methods

@@ -75,11 +75,12 @@ int main(void){
   LED_Config(); 
   ADC0_Config();
   UART0_Config();
+	UART2_Config();
   Output_Config();
   SysTick_Config(SystemCoreClock/1000);
   PIT_Init(1000);
 	
-	LED_Off();
+	LED_On();
 	//debugger();
 	
   arm_fill_q15(0, little_f.buffer, SIZE);
@@ -88,12 +89,14 @@ int main(void){
   arm_fill_q15(0, index_f.buffer, SIZE);
   arm_fill_q15(0, thumb_f.buffer, SIZE);
 	
-  arm_fill_q15(0, E1.buffer, SIZE);
-  arm_fill_q15(0, E2.buffer, SIZE);
+  //arm_fill_q15(0, E1.buffer, SIZE);
+  //arm_fill_q15(0, E2.buffer, SIZE);
 	
   while(1){
+		UART0_send('a');
+		UART2_send('b');
 		
-	  if(receivedCMD){	//si el serial envió algo (del myo)
+	  /*if(receivedCMD){	//si el serial envió algo (del myo)
 			UART0_send(command[0]);	
 			//LED_Toggle();
 			//Código para cambiar acción con serial
@@ -141,8 +144,7 @@ int main(void){
 			}insind=0;
 			UART0_send('\n');
 			UART0_send('\r');
-		}
-		UART0_putString(":(");
+		}*/
 	}
     //Finger_Close(1);
     //Finger_Open(1);
