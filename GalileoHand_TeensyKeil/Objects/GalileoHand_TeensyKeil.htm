@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\GalileoHand_TeensyKeil.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\GalileoHand_TeensyKeil.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Mon Feb 25 15:49:39 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Tue Feb 26 11:27:15 2019
 <BR><P>
 <H3>Maximum Stack Usage =          8 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -759,24 +759,24 @@ Global Symbols
 <LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PORTC_IRQHandler
 </UL>
 
-<P><STRONG><a name="[8b]"></a>UART2_Config</STRONG> (Thumb, 78 bytes, Stack size 8 bytes, drivers.o(i.UART2_Config))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = UART2_Config
+<P><STRONG><a name="[8b]"></a>UART1_Config</STRONG> (Thumb, 78 bytes, Stack size 8 bytes, drivers.o(i.UART1_Config))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = UART1_Config
 </UL>
 <BR>[Calls]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_EnableIRQ
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[90]"></a>UART2_send</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, drivers.o(i.UART2_send))
+<P><STRONG><a name="[90]"></a>UART1_send</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, drivers.o(i.UART1_send))
 <BR><BR>[Called By]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[7a]"></a>main</STRONG> (Thumb, 180 bytes, Stack size 0 bytes, main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = main &rArr; UART2_Config
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = main &rArr; UART1_Config
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arm_fill_q15
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART2_send
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART2_Config
+<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART1_send
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART1_Config
 <LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART0_send
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART0_Config
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Switch_Config
@@ -793,7 +793,7 @@ Global Symbols
 Local Symbols
 </H3>
 <P><STRONG><a name="[84]"></a>__NVIC_EnableIRQ</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, drivers.o(i.__NVIC_EnableIRQ))
-<BR><BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART2_Config
+<BR><BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART1_Config
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART0_Config
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Switch_Config
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PIT_Init

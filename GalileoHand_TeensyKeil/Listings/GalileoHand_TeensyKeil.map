@@ -24,13 +24,13 @@ Section Cross References
     main.o(i.main) refers to drivers.o(i.LED_Config) for LED_Config
     main.o(i.main) refers to drivers.o(i.ADC0_Config) for ADC0_Config
     main.o(i.main) refers to drivers.o(i.UART0_Config) for UART0_Config
-    main.o(i.main) refers to drivers.o(i.UART2_Config) for UART2_Config
+    main.o(i.main) refers to drivers.o(i.UART1_Config) for UART1_Config
     main.o(i.main) refers to drivers.o(i.Output_Config) for Output_Config
     main.o(i.main) refers to drivers.o(i.PIT_Init) for PIT_Init
     main.o(i.main) refers to drivers.o(i.LED_On) for LED_On
     main.o(i.main) refers to arm_fill_q15.o(.text) for arm_fill_q15
     main.o(i.main) refers to drivers.o(i.UART0_send) for UART0_send
-    main.o(i.main) refers to drivers.o(i.UART2_send) for UART2_send
+    main.o(i.main) refers to drivers.o(i.UART1_send) for UART1_send
     main.o(i.main) refers to system_mk20d7.o(.data) for SystemCoreClock
     main.o(i.main) refers to main.o(.data) for little_f
     drivers.o(i.ADC0_Read) refers to drivers.o(.constdata) for channel2sc1a
@@ -39,8 +39,8 @@ Section Cross References
     drivers.o(i.Switch_Config) refers to drivers.o(i.__NVIC_EnableIRQ) for __NVIC_EnableIRQ
     drivers.o(i.UART0_Config) refers to drivers.o(i.__NVIC_EnableIRQ) for __NVIC_EnableIRQ
     drivers.o(i.UART0_putString) refers to drivers.o(i.UART0_send) for UART0_send
-    drivers.o(i.UART2_Config) refers to drivers.o(i.__NVIC_EnableIRQ) for __NVIC_EnableIRQ
-    drivers.o(i.UART2_putString) refers to drivers.o(i.UART2_send) for UART2_send
+    drivers.o(i.UART1_Config) refers to drivers.o(i.__NVIC_EnableIRQ) for __NVIC_EnableIRQ
+    drivers.o(i.UART1_putString) refers to drivers.o(i.UART1_send) for UART1_send
     finger.o(i.Finger_Action) refers to finger.o(i.Finger_Stop) for Finger_Stop
     finger.o(i.Finger_Action) refers to arm_mean_q15.o(.text) for arm_mean_q15
     finger.o(i.Finger_Action) refers to finger.o(i.Finger_Close) for Finger_Close
@@ -186,7 +186,7 @@ Removing Unused input sections from the image.
     Removing drivers.o(i.QD_Init), (100 bytes).
     Removing drivers.o(i.QD_Process), (16 bytes).
     Removing drivers.o(i.UART0_putString), (22 bytes).
-    Removing drivers.o(i.UART2_putString), (22 bytes).
+    Removing drivers.o(i.UART1_putString), (22 bytes).
     Removing finger.o(.rev16_text), (4 bytes).
     Removing finger.o(.revsh_text), (4 bytes).
     Removing finger.o(.rrx_text), (6 bytes).
@@ -354,8 +354,8 @@ Image Symbol Table
     i.UART0_Config                           0x00000bfc   Section        0  drivers.o(i.UART0_Config)
     i.UART0_RX_TX_IRQHandler                 0x00000c58   Section        0  main.o(i.UART0_RX_TX_IRQHandler)
     i.UART0_send                             0x00000cb0   Section        0  drivers.o(i.UART0_send)
-    i.UART2_Config                           0x00000cc8   Section        0  drivers.o(i.UART2_Config)
-    i.UART2_send                             0x00000d24   Section        0  drivers.o(i.UART2_send)
+    i.UART1_Config                           0x00000cc8   Section        0  drivers.o(i.UART1_Config)
+    i.UART1_send                             0x00000d24   Section        0  drivers.o(i.UART1_send)
     i.__NVIC_EnableIRQ                       0x00000d3c   Section        0  drivers.o(i.__NVIC_EnableIRQ)
     __NVIC_EnableIRQ                         0x00000d3d   Thumb Code    26  drivers.o(i.__NVIC_EnableIRQ)
     i.main                                   0x00000d58   Section        0  main.o(i.main)
@@ -589,8 +589,8 @@ Image Symbol Table
     UART0_Config                             0x00000bfd   Thumb Code    78  drivers.o(i.UART0_Config)
     UART0_RX_TX_IRQHandler                   0x00000c59   Thumb Code    70  main.o(i.UART0_RX_TX_IRQHandler)
     UART0_send                               0x00000cb1   Thumb Code    20  drivers.o(i.UART0_send)
-    UART2_Config                             0x00000cc9   Thumb Code    78  drivers.o(i.UART2_Config)
-    UART2_send                               0x00000d25   Thumb Code    20  drivers.o(i.UART2_send)
+    UART1_Config                             0x00000cc9   Thumb Code    78  drivers.o(i.UART1_Config)
+    UART1_send                               0x00000d25   Thumb Code    20  drivers.o(i.UART1_send)
     main                                     0x00000d59   Thumb Code   180  main.o(i.main)
     Region$$Table$$Base                      0x00000e44   Number         0  anon$$obj.o(Region$$Table)
     Region$$Table$$Limit                     0x00000e64   Number         0  anon$$obj.o(Region$$Table)
@@ -708,8 +708,8 @@ Memory Map of the image
     0x00000bfc   0x00000bfc   0x0000005c   Code   RO          126    i.UART0_Config      drivers.o
     0x00000c58   0x00000c58   0x00000058   Code   RO            8    i.UART0_RX_TX_IRQHandler  main.o
     0x00000cb0   0x00000cb0   0x00000018   Code   RO          128    i.UART0_send        drivers.o
-    0x00000cc8   0x00000cc8   0x0000005c   Code   RO          129    i.UART2_Config      drivers.o
-    0x00000d24   0x00000d24   0x00000018   Code   RO          131    i.UART2_send        drivers.o
+    0x00000cc8   0x00000cc8   0x0000005c   Code   RO          129    i.UART1_Config      drivers.o
+    0x00000d24   0x00000d24   0x00000018   Code   RO          131    i.UART1_send        drivers.o
     0x00000d3c   0x00000d3c   0x0000001a   Code   RO          132    i.__NVIC_EnableIRQ  drivers.o
     0x00000d56   0x00000d56   0x00000002   PAD
     0x00000d58   0x00000d58   0x000000d4   Code   RO           10    i.main              main.o

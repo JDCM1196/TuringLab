@@ -116,21 +116,21 @@ void UART0_Config(void){
 }
 
 
-void UART2_Config(void){
+void UART1_Config(void){
 	SIM->SCGC5 |= SIM_SCGC5_PORTE_MASK;
-	SIM->SCGC4 |= SIM_SCGC4_UART2_MASK; 
-	PORTE->PCR[0] = (PORT_PCR_PE_MASK | PORT_PCR_PS_MASK | PORT_PCR_PFE_MASK | PORT_PCR_MUX(3));
-	PORTE->PCR[1] = (PORT_PCR_DSE_MASK  | PORT_PCR_SRE_MASK | PORT_PCR_MUX(3));
-	UART2->C2 &= (uint8_t)~(uint8_t)((UART_C2_TE_MASK | UART_C2_RE_MASK));
-	UART2->BDH = UART_BDH_SBR(0x00);																	//Uses bus clock (36 MHz)
-	UART2->BDL = UART_BDL_SBR(0x13);																	//115200 bauds - 0x13, 9600 bauds - 0xEA
-	UART2->C4 = UART_C4_BRFA(0x11);																		//115200 bauds - 0x11, 9600 bauds - 0x0C																										
-	UART2->C1 = UART_C1_ILT_MASK;
-	//UART2->TWFIFO = 2; 																				// tx watermark, causes S1_TDRE to set
-	//UART2->RWFIFO = 2; 																				// rx watermark, causes S1_RDRF to set
-	//UART2->PFIFO = UART_PFIFO_TXFE_MASK | UART_PFIFO_RXFE_MASK;
-	UART2->C2 = (UART_C2_RIE_MASK | UART_C2_TE_MASK | UART_C2_RE_MASK);
-	NVIC_EnableIRQ(UART2_RX_TX_IRQn);			
+	SIM->SCGC4 |= SIM_SCGC4_UART1_MASK; 
+	PORTE->PCR[1] = (PORT_PCR_PE_MASK | PORT_PCR_PS_MASK | PORT_PCR_PFE_MASK | PORT_PCR_MUX(3));
+	PORTE->PCR[0] = (PORT_PCR_DSE_MASK  | PORT_PCR_SRE_MASK | PORT_PCR_MUX(3));
+	UART1->C2 &= (uint8_t)~(uint8_t)((UART_C2_TE_MASK | UART_C2_RE_MASK));
+	UART1->BDH = UART_BDH_SBR(0x00);																	//Uses system clock (72 MHz)
+	UART1->BDL = UART_BDL_SBR(0x27);																	//115200 bauds - 0x13, 9600 bauds - 0xEA
+	UART1->C4 = UART_C4_BRFA(0x02);																		//115200 bauds - 0x11, 9600 bauds - 0x0C																										
+	UART1->C1 = UART_C1_ILT_MASK;
+	//UART1->TWFIFO = 2; 																				// tx watermark, causes S1_TDRE to set
+	//UART1->RWFIFO = 2; 																				// rx watermark, causes S1_RDRF to set
+	//UART1->PFIFO = UART_PFIFO_TXFE_MASK | UART_PFIFO_RXFE_MASK
+	UART1->C2 = (UART_C2_RIE_MASK | UART_C2_TE_MASK | UART_C2_RE_MASK);
+	NVIC_EnableIRQ(UART1_RX_TX_IRQn);			
 }
 	
 //Methods
@@ -165,14 +165,14 @@ void UART0_putString(char *mystring){
 	}
 }
 
-void UART2_send(char dato){
-	while (!((UART2->S1) & (UART_S1_TDRE_MASK)));  
-	UART2->D = dato;
+void UART1_send(char dato){
+	while (!((UART1->S1) & (UART_S1_TDRE_MASK)));  
+	UART1->D = dato;
 }
 
-void UART2_putString(char *mystring){
+void UART1_putString(char *mystring){
 	while(*mystring){
-		UART2_send(*mystring);
+		UART1_send(*mystring);
 		mystring++;
 	}
 }

@@ -23,7 +23,7 @@ void Switch_Config(void);
 void ADC0_Config(void);
 void FTM0_Config(void);
 void UART0_Config(void);
-void UART2_Config(void);
+void UART1_Config(void);
 
 void LED_On(void);
 void LED_Off(void);
@@ -37,7 +37,7 @@ void QD_Process(int16_t * encoding);
 uint16_t ADC0_Read(unsigned int channel);
 void UART0_send(char dato);
 void UART0_putString(char *mystring);
-void UART2_send(char dato);
-void UART2_putString(char *mystring);
+void UART1_send(char dato);
+void UART1_putString(char *mystring);
 
 #endif /* DRIVERS_H_ */
