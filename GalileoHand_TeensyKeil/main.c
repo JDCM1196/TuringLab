@@ -80,7 +80,7 @@ int main(void){
   SysTick_Config(SystemCoreClock/1000);
   PIT_Init(1000);
 	
-	LED_On();
+	//LED_On();
 	//debugger();
 	
   arm_fill_q15(0, little_f.buffer, SIZE);
@@ -93,31 +93,30 @@ int main(void){
   //arm_fill_q15(0, E2.buffer, SIZE);
 	
   while(1){
-		UART0_send('a');
-		UART1_send('b');
+		//UART0_send('a');
+		//UART1_send('b');
 		
-	  if(receivedCMD){	//si el serial envió algo (del myo)
+	  if(receivedCMD){	//si se recibió información para la pantalla
 			UART0_send(command[0]);	
 			//LED_Toggle();
 			//Código para cambiar acción con serial
 			if(command[0]=='n'){
-				LED_On();
+				//LED_On();
 				if(cmd<5) cmd++;
 				else cmd = 0;
 				UART0_send(cmd+'0');
 			}else if(command[0]=='p'){
-				LED_Off();
+				//LED_Off();
 				if(cmd==0) cmd=5;
 				else cmd--;
 				UART0_send(cmd+'0');
 			}else if(command[0]=='a'){
-				UART0_putString(":)");
         //if(E1.mean>E1.threshold){
-				//LED_On();
+				LED_On();
 				activate=1;
       }else if(command[0]=='d'){
         //if(E2.mean>E2.threshold){
-				//LED_Off();
+				LED_Off();
 				Hand_Action(REST);
       }else if(command[0] == 'b'){
 				Hand_Action(REST);
@@ -197,23 +196,16 @@ void PORTC_IRQHandler(void){
 	}
 }
 	
-void UART0_RX_TX_IRQHandler(void){
-	/* 
-  uint8_t data ;
-  (void) UART0->S1;
-  data = UART0->D;
-  UART0->D = data;
-									para regresar a la pantalla despues
-	*/
+void UART1_RX_TX_IRQHandler(void){
 	uint8_t data;
-  (void) UART0->S1;
-  data = UART0->D;
+  (void) UART1->S1;
+  data = UART1->D;
 	if(data=='\n' || data=='\r'){
 		receivedCMD=1;
 		insind=0;
 	}else{
-		(void) UART0->S1;
-		UART0->D = data;
+		(void) UART1->S1;
+		UART1->D = data;
 		command[insind]=data;
 		insind++;
 		if(insind>9) insind = 9;
