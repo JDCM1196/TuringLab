@@ -1,0 +1,9 @@
+Added Component: Designator=U2(Arduino Nano)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=5V Pin=U2-5V
+Added Pin To Net: NetName=GND Pin=U2-GND
+Added Pin To Net: NetName=NetU1_3 Pin=U2-RXD
+Added Pin To Net: NetName=NetO1_1 Pin=U2-RX
+Added Pin To Net: NetName=NetU1_4 Pin=U2-TXD
+Added Pin To Net: NetName=NetO1_2 Pin=U2-TX
+Added Member To Class: ClassName=MYO-BT Member=Component U2 Arduino_Nano

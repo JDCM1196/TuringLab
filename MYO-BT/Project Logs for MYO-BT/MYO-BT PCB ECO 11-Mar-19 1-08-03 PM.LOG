@@ -1,0 +1,6 @@
+Change Component Footprint: Designator=12V Old Footprint=12VCC New Footprint=Vout
+Added Component: Designator=5Vout(Vout)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=5V Pin=5Vout-1
+Added Pin To Net: NetName=GND Pin=5Vout-2
+Added Member To Class: ClassName=MYO-BT Member=Component 5Vout 12V Output

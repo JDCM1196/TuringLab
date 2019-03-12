@@ -1,0 +1,5 @@
+Added Component: Designator=O?(12VCC)
+Add component. Clean all parameters for all variants
+Added Net: Name=GND_P
+Added Member To Class: ClassName=MYO-BT Member=Component O? 12V Output
+Added Room: Name=MYO-BT

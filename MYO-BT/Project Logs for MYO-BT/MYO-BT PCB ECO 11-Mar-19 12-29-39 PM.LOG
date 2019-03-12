@@ -1,0 +1,10 @@
+Removed Pin From Net: NetName=NetU1_3 Pin=U1-3
+Removed Pin From Net: NetName=NetTX_1 Pin=U1-4
+Removed Pin From Net: NetName=NetU1_3 Pin=U2-RXD
+Removed Pin From Net: NetName=NetTX_1 Pin=U2-TXD
+Added Pin To Net: NetName=NetTX_1 Pin=U1-3
+Added Pin To Net: NetName=NetU1_3 Pin=U1-4
+Added Pin To Net: NetName=NetTX_1 Pin=U2-RXD
+Added Pin To Net: NetName=NetU1_3 Pin=U2-TXD
+Change Net Name : Old Net Name=NetU1_3 New Net Name=NetU1_4
+Added Room: Name=MYO-BT

@@ -1,0 +1,6 @@
+Removed Pin From Net: NetName=NetO1_1 Pin=U2-RX
+Change Component Designator: OldDesignator=12V NewDesignator=O2
+Change Component Designator: OldDesignator=RX NewDesignator=O1
+Added Pin To Net: NetName=NetO1_1 Pin=U1-4
+Added Pin To Net: NetName=NetO1_1 Pin=U2-TXD
+Added Room: Name=MYO-BT

@@ -1,0 +1,7 @@
+Removed Pin From Net: NetName=NetO1_2 Pin=U2-TX
+Added Component: Designator=O1(Comm_Out)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=NetO1_2 Pin=U1-4
+Added Pin To Net: NetName=NetO1_2 Pin=U2-TXD
+Added Member To Class: ClassName=MYO-BT Member=Component O1 Comm_Out
+Added Room: Name=MYO-BT
