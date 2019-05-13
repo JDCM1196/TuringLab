@@ -63,12 +63,8 @@ uint8_t btn = 0;                                                            // A
 uint8_t cmd = 0;                                                            // LCD commands
 uint32_t ticks = 0;                                                         // 1 ms ticks
 uint8_t i = 0;
-															
-void debugger(void){
-	Finger_Open(4);
-	while(1){
-	}
-}
+
+int count = 0;
 
 int main(void){
   Switch_Config();
@@ -79,10 +75,7 @@ int main(void){
   Output_Config();
   SysTick_Config(SystemCoreClock/1000);
   PIT_Init(1000);
-	
-	//LED_On();
-	//debugger();
-	
+
   arm_fill_q15(0, little_f.buffer, SIZE);
   arm_fill_q15(0, ring_f.buffer, SIZE);
   arm_fill_q15(0, middle_f.buffer, SIZE);
@@ -93,12 +86,9 @@ int main(void){
   //arm_fill_q15(0, E2.buffer, SIZE);
 	
   while(1){
-		//UART0_send('a');
-		//UART1_send('b');
+		LED_Toggle();
 		
 	  if(receivedCMD){	//si se recibió información para la pantalla
-			UART0_send(command[0]);	
-			//LED_Toggle();
 			//Código para cambiar acción con serial
 			if(command[0]=='n'){
 				//LED_On();
@@ -112,20 +102,21 @@ int main(void){
 				UART0_send(cmd+'0');
 			}else if(command[0]=='a'){
         //if(E1.mean>E1.threshold){
-				LED_On();
+				//LED_On();
 				activate=1;
       }else if(command[0]=='d'){
         //if(E2.mean>E2.threshold){
-				LED_Off();
+				//LED_Off();
+				activate = 0;
 				Hand_Action(REST);
       }else if(command[0] == 'b'){
-				Hand_Action(REST);
+
 			}else{
-				UART0_putString("Error\n\r");
-				UART0_send(command[0]);	
+				Hand_Action(REST);
 			}
 			
 			if(activate){
+				LED_Off();
 				switch(cmd){
 					case POWER:    Hand_Action(POWER);    break;
 					case POINT:    Hand_Action(POINT);    break;		
@@ -134,15 +125,13 @@ int main(void){
 					case LATERAL:  Hand_Action(LATERAL);  break;
 					case PEACE:    Hand_Action(PEACE);    break;
 					case NOTPOINT: Hand_Action(NOTPOINT); break;
-					default:       Hand_Action(REST); 
+					default:       Hand_Action(REST); 		LED_On();
 				}
 			}
 			receivedCMD=0;//myo
-			for(;insind<10;insind++){
-				command[insind]=0;
-			}insind=0;
-			UART0_send('\n');
 			UART0_send('\r');
+			UART0_send('\n');
+			command[0] = 0;
 		}
 	}
     //Finger_Close(1);
@@ -196,19 +185,15 @@ void PORTC_IRQHandler(void){
 	}
 }
 	
+
 void UART1_RX_TX_IRQHandler(void){
 	uint8_t data;
-  (void) UART1->S1;
-  data = UART1->D;
+	(void) UART1->S1;
+	data = UART1->D;
 	if(data=='\n' || data=='\r'){
-		receivedCMD=1;
-		insind=0;
-	}else{
-		(void) UART1->S1;
-		UART1->D = data;
-		command[insind]=data;
-		insind++;
-		if(insind>9) insind = 9;
+		receivedCMD = 1;
+	} else{
+		command[0]=data;
 	}
 }
 
