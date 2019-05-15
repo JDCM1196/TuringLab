@@ -33,7 +33,7 @@
 
 typedef struct finger{
 	uint8_t state;
-	uint8_t finger_m;		//qué dedo es, por el número del motor que lo controla
+	uint8_t finger_m;		//qué dedo es, según el número del motor que lo controla
 	uint32_t time_ms;		//tiempo que se tarda en realizar una acción
 	uint32_t time_r;		//cambio de tiempo que sobra -> diferencia de tiempo de OPEN y CLOSE
 	q15_t mean;					//mean absolute value con punto fijo para la corriente -> para ver si supera el promedio, porque si sí, ya tocó algo

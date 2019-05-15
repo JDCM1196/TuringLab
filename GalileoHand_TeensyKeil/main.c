@@ -85,38 +85,61 @@ int main(void){
   //arm_fill_q15(0, E1.buffer, SIZE);
   //arm_fill_q15(0, E2.buffer, SIZE);
 	
-  while(1){
-		LED_Toggle();
+  while(1){/*
+		while(count < 50000000) count++;
+		count = 0;
+		LED_On();
+		Hand_Action(POWER);
+		while(count < 50000000) count++;
+		count = 0;
+		Hand_Action(REST);
+		LED_Off();*/
 		
+		//Sí cierra, y abre, el dedo con Finger_Close(4) y Finger_Open(4), pero no al usar el Finger_Action(&index_f, actions[0][3]) y Finger_Action(&index_f, actions[6][3])
+		//Igual, hay que calibrar los thresholds, porque topa y se regresa el dedo (de seguro pasa con los demás también)
+		//Nota: Con Finger_Close(4) se baja el dedo, pero no se cierra (no se termina de "enrollar")
+		
+		while(count < 25000000) count++;
+		count = 0;
+		Finger_Action(&ring_f, actions[0][1]);
+		LED_On();
+		while(count < 25000000) count++;
+		count = 0;	
+		Finger_Action(&ring_f, actions[6][1]);
+		LED_Off();
+		
+		/*
+		LED_On();
 	  if(receivedCMD){	//si se recibió información para la pantalla
+			LED_On();
 			//Código para cambiar acción con serial
-			if(command[0]=='n'){
+			if(command[0] == 'n'){
 				//LED_On();
-				if(cmd<5) cmd++;
+				if(cmd < 5) cmd++;
 				else cmd = 0;
 				UART0_send(cmd+'0');
-			}else if(command[0]=='p'){
+			}else if(command[0] == 'p'){
 				//LED_Off();
-				if(cmd==0) cmd=5;
+				if(cmd == 0) cmd = 5;
 				else cmd--;
 				UART0_send(cmd+'0');
-			}else if(command[0]=='a'){
+			}else if(command[0] == 'a'){
         //if(E1.mean>E1.threshold){
 				//LED_On();
-				activate=1;
+				activate = 1;
       }else if(command[0]=='d'){
         //if(E2.mean>E2.threshold){
 				//LED_Off();
 				activate = 0;
 				Hand_Action(REST);
       }else if(command[0] == 'b'){
-
 			}else{
 				Hand_Action(REST);
 			}
 			
 			if(activate){
 				LED_Off();
+				activate = 0;
 				switch(cmd){
 					case POWER:    Hand_Action(POWER);    break;
 					case POINT:    Hand_Action(POINT);    break;		
@@ -124,18 +147,15 @@ int main(void){
 					case HOOK:     Hand_Action(HOOK);     break;
 					case LATERAL:  Hand_Action(LATERAL);  break;
 					case PEACE:    Hand_Action(PEACE);    break;
-					case NOTPOINT: Hand_Action(NOTPOINT); break;
 					default:       Hand_Action(REST); 		LED_On();
 				}
 			}
-			receivedCMD=0;//myo
+			receivedCMD = 0;//myo
 			UART0_send('\r');
 			UART0_send('\n');
 			command[0] = 0;
-		}
+		}*/
 	}
-    //Finger_Close(1);
-    //Finger_Open(1);
 }
 void SysTick_Handler(void) {
   //LED_On();		
