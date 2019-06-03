@@ -53,7 +53,7 @@ void Finger_Stop(uint8_t finger_m){
 void Finger_Action(fingers *finger_f, uint8_t action){
 	if(action == CLOSE){
 		switch(finger_f->state){
-			case OPEN:{
+			case OPEN:{	
 				finger_f->state = CLOSE;
 				Finger_Stop(finger_f->finger_m);
 			} break;
@@ -139,7 +139,7 @@ void Finger_ActionTime(fingers *finger_f, uint8_t action){
 			} break;
 			case WAITO:{
 				finger_f->state = WAITO;
-				Finger_Stop(finger_f->finger_m);
+				Finger_Stop(	finger_f->finger_m);
 			} break;
 		}
 	} else{	//OPEN

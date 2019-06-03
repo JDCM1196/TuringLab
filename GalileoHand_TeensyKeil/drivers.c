@@ -123,8 +123,8 @@ void UART1_Config(void){
 	PORTE->PCR[0] = (PORT_PCR_DSE_MASK  | PORT_PCR_SRE_MASK | PORT_PCR_MUX(3));
 	UART1->C2 &= (uint8_t)~(uint8_t)((UART_C2_TE_MASK | UART_C2_RE_MASK));
 	UART1->BDH = UART_BDH_SBR(0x00);																	//Uses system clock (72 MHz)
-	UART1->BDL = UART_BDL_SBR(0x27);																	//115200 bauds - 0x13, 9600 bauds - 0xEA
-	UART1->C4 = UART_C4_BRFA(0x02);																		//115200 bauds - 0x11, 9600 bauds - 0x0C																										
+	UART1->BDL = UART_BDL_SBR(0x27);																	//115200 bauds - 0x27
+	UART1->C4 = UART_C4_BRFA(0x02);																		//115200 bauds - 0x02																										
 	UART1->C1 = UART_C1_ILT_MASK;
 	//UART1->TWFIFO = 2; 																				// tx watermark, causes S1_TDRE to set
 	//UART1->RWFIFO = 2; 																				// rx watermark, causes S1_RDRF to set

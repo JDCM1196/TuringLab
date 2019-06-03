@@ -30,6 +30,7 @@
 #define			PEACE     5
 #define 		REST      6
 #define		  NOTPOINT  7
+#define			ROCK			8
 
 typedef struct finger{
 	uint8_t state;
