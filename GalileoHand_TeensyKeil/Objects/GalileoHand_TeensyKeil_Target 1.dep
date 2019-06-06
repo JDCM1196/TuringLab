@@ -1,5 +1,5 @@
 Dependencies for Project 'GalileoHand_TeensyKeil', Target 'Target 1': (DO NOT MODIFY !)
-F (.\main.c)(0x5CF5930B)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_K20_DFP\1.5.2\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DMK20DX256xxx7-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+F (.\main.c)(0x5CF83A84)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_K20_DFP\1.5.2\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DMK20DX256xxx7-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
 I (C:\Keil_v5\ARM\PACK\Keil\Kinetis_K20_DFP\1.5.2\Device\Include\MK20D7.h)(0x585C40EA)
 I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm4.h)(0x58990E6A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588C4824)
@@ -12,7 +12,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x588C4824)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x588C4824)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588C4824)
 I (drivers.h)(0x5C757449)
-I (finger.h)(0x5CE7073F)
+I (finger.h)(0x5CF83996)
 F (.\drivers.c)(0x5CF04F36)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_K20_DFP\1.5.2\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DMK20DX256xxx7-o .\objects\drivers.o --omf_browse .\objects\drivers.crf --depend .\objects\drivers.d)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588C4824)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x588C4824)
@@ -26,7 +26,7 @@ I (drivers.h)(0x5C757449)
 I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\arm_math.h)(0x58990E6A)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x588C4824)
 F (.\drivers.h)(0x5C757449)()
-F (.\finger.c)(0x5CF03E2C)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_K20_DFP\1.5.2\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DMK20DX256xxx7-o .\objects\finger.o --omf_browse .\objects\finger.crf --depend .\objects\finger.d)
+F (.\finger.c)(0x5CF934AB)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_K20_DFP\1.5.2\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DMK20DX256xxx7-o .\objects\finger.o --omf_browse .\objects\finger.crf --depend .\objects\finger.d)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588C4824)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x588C4824)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588C4824)
@@ -38,8 +38,8 @@ I (C:\Keil_v5\ARM\PACK\Keil\Kinetis_K20_DFP\1.5.2\Device\Include\system_MK20D7.h
 I (drivers.h)(0x5C757449)
 I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\arm_math.h)(0x58990E6A)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x588C4824)
-I (finger.h)(0x5CE7073F)
-F (.\finger.h)(0x5CE7073F)()
+I (finger.h)(0x5CF83996)
+F (.\finger.h)(0x5CF83996)()
 F (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Lib\ARM\arm_cortexM4l_math.lib)(0x58990E6E)()
 F (RTE\Device\MK20DX256xxx7\startup_MK20D7.s)(0x5B86D442)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_K20_DFP\1.5.2\Device\Include--pd "__UVISION_VERSION SETA 524" --pd "_RTE_ SETA 1" --pd "MK20DX256xxx7 SETA 1"--list .\listings\startup_mk20d7.lst --xref -o .\objects\startup_mk20d7.o --depend .\objects\startup_mk20d7.d)
 F (RTE\Device\MK20DX256xxx7\system_MK20D7.c)(0x5B86D442)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_K20_DFP\1.5.2\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DMK20DX256xxx7-o .\objects\system_mk20d7.o --omf_browse .\objects\system_mk20d7.crf --depend .\objects\system_mk20d7.d)

@@ -37,9 +37,9 @@ typedef struct finger{
 	uint8_t finger_m;		//qué dedo es, según el número del motor que lo controla
 	uint32_t time_ms;		//tiempo que se tarda en realizar una acción
 	uint32_t time_r;		//cambio de tiempo que sobra -> diferencia de tiempo de OPEN y CLOSE
-	q15_t mean;					//mean absolute value con punto fijo para la corriente -> para ver si supera el promedio, porque si sí, ya tocó algo
+	q15_t mean;					//mean absolute value con punto fijo para la corriente
 	q15_t threshold;		//threshold que depende de cada dedo
-	q15_t buffer[SIZE]; //buffer que contiene a la señal enviada por el músculo
+	q15_t buffer[SIZE];
 	} fingers;
 
 void Finger_Close(uint8_t finger_m);

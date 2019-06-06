@@ -1,12 +1,15 @@
 /* Universidad Galileo
  * Turing Research Lab
  * Julio E. Fajardo
+ * Guillermo J. Maldonado
+ * Juan D. Cardona
  * Galileo Bionic Hand
  * CMSIS-DSP Application
  * Embedded Prostheses Controller
  * May-09-2017
  * main.c
  */
+
 
 #define ARM_MATH_CM4
 
@@ -21,20 +24,19 @@
 #define ACTIVATED   1
 
 int16_t value = 0;
-															//cosas para el demo
+															
 volatile char receivedCMD;
 char command[10]; 
-char insind;
 char activate=0;
 
 uint8_t muscle_state = DEACTIVATED;
 
-fingers thumb_rot = {WAITC,6,0,200,0,80};
-fingers thumb_f =   {WAITC,5,0,200,0,80};
-fingers index_f =   {WAITC,4,0,200,0,80};
-fingers middle_f=  {WAITC,3,0,200,0,100};
-fingers ring_f  =   {WAITC,2,0,200,0,80};
-fingers little_f=   {WAITC,1,0,200,0,80};
+fingers thumb_rot = {WAITC,6,0,0,0,75};
+fingers thumb_f =   {WAITC,5,0,0,0,75};
+fingers index_f =   {WAITC,4,0,0,0,72};
+fingers middle_f =  {WAITC,3,0,0,0,72};
+fingers ring_f  =   {WAITC,2,0,0,0,80};
+fingers little_f=   {WAITC,1,0,0,0,75};
 
 const uint8_t actions[9][6] = { CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE,   // Power Grip 
                                 CLOSE, CLOSE, CLOSE, OPEN,  CLOSE, CLOSE,   // Point
@@ -49,7 +51,7 @@ const uint8_t actions[9][6] = { CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE,   // P
 
 uint8_t cmd = 0;                                                            // LCD commands
 uint32_t ticks = 0;                                                         // 1 ms ticks
-uint8_t i = 0;
+int ready = 0;
 
 int main(void){
   LED_Config(); 
@@ -68,32 +70,11 @@ int main(void){
   //arm_fill_q15(0, E1.buffer, SIZE);
   //arm_fill_q15(0, E2.buffer, SIZE);
 
-  while(1){		
-	  if(receivedCMD){	//si se recibió información para la pantalla
-			//Código para cambiar acción con serial
-			if(command[0] == 'n'){
-				//LED_On();
-				if(cmd < 5) cmd++;
-				else cmd = 0;
-				UART0_send(cmd+'0');
-			}else if(command[0] == 'p'){
-				//LED_Off();
-				if(cmd == 0) cmd = 5;
-				else cmd--;
-				UART0_send(cmd+'0');
-			}else if(command[0] == 'a'){
-        //if(E1.mean>E1.threshold)
-				LED_On();
-				activate = 1;
-      }else if(command[0]=='d'){
-        //if(E2.mean>E2.threshold)
-				LED_Off();
-				activate = 0;
-			}else{
-			}
-			/*
+  while(1){	
+		
+		//if(ready){
 			if(activate){
-				activate = 0;
+				LED_On();
 				switch(cmd){
 					case POWER:    Hand_Action(POWER);    break;
 					case POINT:    Hand_Action(POINT);    break;		
@@ -101,18 +82,14 @@ int main(void){
 					case HOOK:     Hand_Action(HOOK);     break;
 					case LATERAL:  Hand_Action(LATERAL);  break;
 					case PEACE:    Hand_Action(PEACE);    break;
-					case ROCK:		 Hand_Action(ROCK);			break;
+					//case ROCK:		 Hand_Action(ROCK);			break;
 					default:       Hand_Action(REST); 		LED_On();
 				}
 			} else{
+				LED_Off();
 				Hand_Action(REST);
-				Hand_Action(REST);
-			}*/
-			receivedCMD = 0;//myo
-			UART0_send('\r');
-			UART0_send('\n');
-			command[0] = 0;
-		}
+			}
+		//}
 	}
 }
 void SysTick_Handler(void) {
@@ -137,12 +114,46 @@ void UART1_RX_TX_IRQHandler(void){
 	uint8_t data;
 	(void) UART1->S1;
 	data = UART1->D;
-	if(data=='\n' || data=='\r'){
+	//LED_Toggle();
+	
+	if(data == '\n' || data == '\r'){
 		receivedCMD = 1;
 	} else{
-		command[0]=data;
+		switch(data){
+			case 'a':{
+				activate = ACTIVATED; 
+				break;
+			}
+			case 'd':{
+				activate = DEACTIVATED; 
+				break;
+			}
+			case 'n':{
+				if(!activate){
+					if(cmd < 5) cmd++;
+					else cmd = 0;
+					UART0_send(cmd + '0');
+				}
+				break;
+			}
+			case 'p':{
+				if(!activate){
+					if(cmd > 0) cmd--;
+					else cmd = 5;
+					UART0_send(cmd + '0');
+				}
+				break;
+			}
+			/*case 'ñ':{
+				ready = 1;
+				LED_On();
+				break;
+			}*/
+			default:{
+				break;
+			}
+		}
 	}
-	LED_On();
 }
 
 void Hand_Action(uint8_t hand_action){

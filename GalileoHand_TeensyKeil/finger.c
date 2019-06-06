@@ -17,14 +17,14 @@
 #include "drivers.h"    
 #include "finger.h"
 
-const uint32_t fingers_mask[] = { 1<<4, 1<<2,  1<<3,								//máscaras para cada motor (dependen del puerto de cada motor -> ver en drivers.c)
+const uint32_t fingers_mask[] = { 1<<2, 1<<4,  1<<3,								//máscaras para cada motor (dependen del puerto de cada motor -> ver en drivers.c)
                                   1<<3, 1<<4,  1<<2,
                                   1<<7, 1<<13, 1<<12,
                                   1<<0, 1<<6,  1<<1
                                 };
 
-GPIO_Type *fingers_addr[]    = { PTC, PTC, PTC,
-                                 PTD, PTD, PTD,
+GPIO_Type *fingers_addr[]    = { PTC, PTC, PTD,
+                                 PTC, PTD, PTD,
                                  PTD, PTA, PTA,
                                  PTD, PTD, PTC
                                 };
@@ -74,7 +74,7 @@ void Finger_Action(fingers *finger_f, uint8_t action){
 			} break;
 			case WAITO:{
 				finger_f->state = WAITO;
-				finger_f->time_r = finger_f->time_ms/4;									
+				finger_f->time_r = finger_f->time_ms/16;									
 				Finger_Stop(finger_f->finger_m);
 			} break;
 		}
@@ -128,7 +128,7 @@ void Finger_ActionTime(fingers *finger_f, uint8_t action){
 				Finger_Stop(finger_f->finger_m);
 			} break;
 			case CLOSE:{
-				if((finger_f->time_ms<finger_f->time_r)&&(finger_f->state == CLOSE)){
+				if((finger_f->time_ms < finger_f->time_r) && (finger_f->state == CLOSE)){
 					finger_f->state = CLOSE;
 					Finger_Close(finger_f->finger_m);
 				}
