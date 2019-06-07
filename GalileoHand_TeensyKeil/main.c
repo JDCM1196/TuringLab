@@ -26,17 +26,17 @@
 int16_t value = 0;
 															
 volatile char receivedCMD;
-char command[10]; 
-char activate=0;
+char command[30]; 
+char activate = 0;
 
 uint8_t muscle_state = DEACTIVATED;
 
-fingers thumb_rot = {WAITC,6,0,0,0,75};
-fingers thumb_f =   {WAITC,5,0,0,0,75};
-fingers index_f =   {WAITC,4,0,0,0,72};
-fingers middle_f =  {WAITC,3,0,0,0,72};
-fingers ring_f  =   {WAITC,2,0,0,0,80};
-fingers little_f=   {WAITC,1,0,0,0,75};
+fingers thumb_rot = {WAITC,6,0,0,0,65};
+fingers thumb_f =   {WAITC,5,0,0,0,65};
+fingers index_f =   {WAITC,4,0,0,0,65};
+fingers middle_f =  {WAITC,3,0,0,0,62};
+fingers ring_f  =   {WAITC,2,0,0,0,73};
+fingers little_f=   {WAITC,1,0,0,0,65};
 
 const uint8_t actions[9][6] = { CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE,   // Power Grip 
                                 CLOSE, CLOSE, CLOSE, OPEN,  CLOSE, CLOSE,   // Point
@@ -52,6 +52,7 @@ const uint8_t actions[9][6] = { CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE,   // P
 uint8_t cmd = 0;                                                            // LCD commands
 uint32_t ticks = 0;                                                         // 1 ms ticks
 int ready = 0;
+float flt;
 
 int main(void){
   LED_Config(); 
@@ -85,6 +86,15 @@ int main(void){
 					//case ROCK:		 Hand_Action(ROCK);			break;
 					default:       Hand_Action(REST); 		LED_On();
 				}
+				
+					arm_q15_to_float(&(index_f.mean),&flt,1);
+					sprintf(command, "mean:%f %d\n\r",flt,thumb_rot.mean);
+					UART0_putString(command);
+					sprintf(command, "time_ms: %d\n\r", thumb_rot.time_ms);
+					UART0_putString(command);
+					sprintf(command, "time_r: %d\n\r", thumb_rot.time_r);
+					UART0_putString(command);
+				
 			} else{
 				LED_Off();
 				Hand_Action(REST);
@@ -104,6 +114,7 @@ void SysTick_Handler(void) {
 	Finger_Timing(&ring_f);
 	Finger_Timing(&middle_f);
 	Finger_Timing(&index_f);
+	Finger_Timing(&thumb_f);
 	Finger_Timing(&thumb_rot);
 	ticks++; 
   //LED_Off();

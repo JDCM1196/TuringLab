@@ -49,7 +49,7 @@ void Output_Config(void){
 	PTC->PDDR |= (1<<1)|(1<<2)|(1<<3)|(1<<4);														//PTC.1,2,3&4 as Output 
 	PTD->PDDR |= (1<<0)|(1<<2)|(1<<3)|(1<<4)|(1<<6)|(1<<7);							//PTD.0,2,3,4,6&7 as Output
 }
-
+/*
 void Switch_Config(void){
 	SIM->SCGC5 |= SIM_SCGC5_PORTC_MASK;						
   PORTC->PCR[6] |= PORT_PCR_IRQC(0x09) + PORT_PCR_MUX(0x01) + PORT_PCR_PE_MASK;	//PTC.6 es el 11 //interrupt on rising edge, PTC.6 como GPIO y port enable
@@ -62,7 +62,7 @@ void Switch_Config(void){
 	PTC->PDDR &= ~(0 << 7);															//Setting the bit 7 of the port C as Input
 	PORTC->ISFR = PORT_ISFR_ISF(0xC0); 	  											//Clear interrupt status flag 
 	NVIC_EnableIRQ(PORTC_IRQn);		
-}
+}*/
 
 //Ref 3.3V
 void ADC0_Config(void){
@@ -115,7 +115,7 @@ void UART0_Config(void){
 	NVIC_EnableIRQ(UART0_RX_TX_IRQn);			
 }
 
-
+//UART para la comunicación del MYO
 void UART1_Config(void){
 	SIM->SCGC5 |= SIM_SCGC5_PORTE_MASK;
 	SIM->SCGC4 |= SIM_SCGC4_UART1_MASK; 
@@ -201,6 +201,8 @@ void QD_Init(int16_t * encoding){
 
 // Quadrature Decoder Process, receives as argument a QuadratureDecoder structure and the number of the motor encoder to use, 
 // it determines the amount of steps (16 bit signed).
+/*
 void QD_Process(int16_t * encoding){
 	*encoding = FTM2->CNT;
  }
+*/

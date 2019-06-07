@@ -74,7 +74,7 @@ void Finger_Action(fingers *finger_f, uint8_t action){
 			} break;
 			case WAITO:{
 				finger_f->state = WAITO;
-				finger_f->time_r = finger_f->time_ms/16;									
+				finger_f->time_r = finger_f->time_ms/3;									
 				Finger_Stop(finger_f->finger_m);
 			} break;
 		}
