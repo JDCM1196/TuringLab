@@ -1,5 +1,5 @@
 Dependencies for Project 'GalileoHand_TeensyKeil', Target 'Target 1': (DO NOT MODIFY !)
-F (.\main.c)(0x5CFAA9F3)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_K20_DFP\1.5.2\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DMK20DX256xxx7-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+F (.\main.c)(0x5CFE88BB)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_K20_DFP\1.5.2\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DMK20DX256xxx7-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
 I (C:\Keil_v5\ARM\PACK\Keil\Kinetis_K20_DFP\1.5.2\Device\Include\MK20D7.h)(0x585C40EA)
 I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm4.h)(0x58990E6A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588C4824)
@@ -26,7 +26,7 @@ I (drivers.h)(0x5C757449)
 I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\arm_math.h)(0x58990E6A)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x588C4824)
 F (.\drivers.h)(0x5C757449)()
-F (.\finger.c)(0x5CFAA01A)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_K20_DFP\1.5.2\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DMK20DX256xxx7-o .\objects\finger.o --omf_browse .\objects\finger.crf --depend .\objects\finger.d)
+F (.\finger.c)(0x5CFE86F9)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_K20_DFP\1.5.2\Device\Include-D__UVISION_VERSION="524" -D_RTE_ -DMK20DX256xxx7-o .\objects\finger.o --omf_browse .\objects\finger.crf --depend .\objects\finger.d)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588C4824)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x588C4824)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588C4824)

@@ -20,13 +20,13 @@
 const uint32_t fingers_mask[] = { 1<<2, 1<<4,  1<<3,								//máscaras para cada motor (dependen del puerto de cada motor -> ver en drivers.c)
                                   1<<3, 1<<4,  1<<2,
                                   1<<7, 1<<13, 1<<12,
-                                  1<<0, 1<<6,  1<<1
+                                  1<<0, 1<<1,  1<<6
                                 };
 
 GPIO_Type *fingers_addr[]    = { PTC, PTC, PTD,
                                  PTC, PTD, PTD,
                                  PTD, PTA, PTA,
-                                 PTD, PTD, PTC
+                                 PTD, PTC, PTD
                                 };
 
 void Finger_Close(uint8_t finger_m){												
@@ -74,7 +74,7 @@ void Finger_Action(fingers *finger_f, uint8_t action){
 			} break;
 			case WAITO:{
 				finger_f->state = WAITO;
-				finger_f->time_r = finger_f->time_ms/3;									
+				finger_f->time_r = finger_f->time_ms/2.5;									
 				Finger_Stop(finger_f->finger_m);
 			} break;
 		}
@@ -139,7 +139,7 @@ void Finger_ActionTime(fingers *finger_f, uint8_t action){
 			} break;
 			case WAITO:{
 				finger_f->state = WAITO;
-				Finger_Stop(	finger_f->finger_m);
+				Finger_Stop(finger_f->finger_m);
 			} break;
 		}
 	} else{	//OPEN

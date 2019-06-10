@@ -31,9 +31,9 @@ char activate = 0;
 
 uint8_t muscle_state = DEACTIVATED;
 
-fingers thumb_rot = {WAITC,6,0,0,0,65};
+fingers thumb_rot = {WAITC,6,0,500,0,65};
 fingers thumb_f =   {WAITC,5,0,0,0,65};
-fingers index_f =   {WAITC,4,0,0,0,65};
+fingers index_f =   {WAITC,4,0,0,0,70};
 fingers middle_f =  {WAITC,3,0,0,0,62};
 fingers ring_f  =   {WAITC,2,0,0,0,73};
 fingers little_f=   {WAITC,1,0,0,0,65};
@@ -88,11 +88,11 @@ int main(void){
 				}
 				
 					arm_q15_to_float(&(index_f.mean),&flt,1);
-					sprintf(command, "mean:%f %d\n\r",flt,thumb_rot.mean);
+					sprintf(command, "mean:%f %d\n\r",flt,index_f.mean);
 					UART0_putString(command);
-					sprintf(command, "time_ms: %d\n\r", thumb_rot.time_ms);
+					sprintf(command, "time_ms: %d\n\r", index_f.time_ms);
 					UART0_putString(command);
-					sprintf(command, "time_r: %d\n\r", thumb_rot.time_r);
+					sprintf(command, "time_r: %d\n\r", index_f.time_r);
 					UART0_putString(command);
 				
 			} else{
