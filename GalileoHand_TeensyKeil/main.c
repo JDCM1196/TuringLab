@@ -38,15 +38,19 @@ fingers middle_f =  {WAITC,3,0,0,0,62};
 fingers ring_f  =   {WAITC,2,0,0,0,73};
 fingers little_f=   {WAITC,1,0,0,0,65};
 
-const uint8_t actions[9][6] = { CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE,   // Power Grip 
-                                CLOSE, CLOSE, CLOSE, OPEN,  CLOSE, CLOSE,   // Point
+const uint8_t actions[13][6] = {CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE,   // Power Grip 
+																CLOSE, CLOSE, CLOSE, CLOSE, OPEN,  OPEN,    // Hook
                                 OPEN,  OPEN,  OPEN,  CLOSE, CLOSE, CLOSE,   // Pinch
-                                CLOSE, CLOSE, CLOSE, CLOSE, OPEN,  OPEN,    // Hook
+                                CLOSE, CLOSE, CLOSE, OPEN,  CLOSE, CLOSE,   // Point
                                 CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN,    // Lateral
                                 CLOSE, CLOSE, OPEN,  OPEN,  CLOSE, CLOSE,   // Peace
-                                OPEN,  OPEN,  OPEN,  OPEN,  OPEN,  OPEN,	  // Rest
-																OPEN,  OPEN,  OPEN,  CLOSE, OPEN,  OPEN,		// ~(Point)
-																OPEN,	 CLOSE,	CLOSE, OPEN,	CLOSE, CLOSE		// Rock
+																OPEN,	 CLOSE,	CLOSE, OPEN,	CLOSE, CLOSE,		// Rock
+																OPEN,	 CLOSE,	CLOSE, CLOSE, OPEN,  OPEN,		// Aloha
+																CLOSE, OPEN,	OPEN,	 OPEN,	CLOSE, CLOSE,		// Three
+																OPEN,	 OPEN, 	OPEN,	 OPEN,	CLOSE, CLOSE,		// Four
+																OPEN,	 CLOSE,	CLOSE, CLOSE, CLOSE, CLOSE,		// Fancy
+																OPEN,	 OPEN,  OPEN,  CLOSE,	OPEN,  OPEN,		// Index
+	                              OPEN,  OPEN,  OPEN,  OPEN,  OPEN,  OPEN 	  // Rest
                               };
 
 uint8_t cmd = 0;                                                            // LCD commands
@@ -78,12 +82,17 @@ int main(void){
 				LED_On();
 				switch(cmd){
 					case POWER:    Hand_Action(POWER);    break;
-					case POINT:    Hand_Action(POINT);    break;		
+					case HOOK:     Hand_Action(HOOK);     break;		
 					case PINCH:    Hand_Action(PINCH);    break;
-					case HOOK:     Hand_Action(HOOK);     break;
+					case POINT:    Hand_Action(POINT);    break;
 					case LATERAL:  Hand_Action(LATERAL);  break;
 					case PEACE:    Hand_Action(PEACE);    break;
-					//case ROCK:		 Hand_Action(ROCK);			break;
+					case ROCK:		 Hand_Action(ROCK);			break;
+					case TWO:			 Hand_Action(TWO);			break;
+					case THREE:		 Hand_Action(THREE);		break;
+					case FOUR:		 Hand_Action(FOUR);			break;
+					case FANCY:		 Hand_Action(FANCY);		break;
+					case INDEX:		 Hand_Action(INDEX);		break;
 					default:       Hand_Action(REST); 		LED_On();
 				}
 				
@@ -141,7 +150,7 @@ void UART1_RX_TX_IRQHandler(void){
 			}
 			case 'n':{
 				if(!activate){
-					if(cmd < 5) cmd++;
+					if(cmd < 11) cmd++;
 					else cmd = 0;
 					UART0_send(cmd + '0');
 				}
@@ -150,7 +159,7 @@ void UART1_RX_TX_IRQHandler(void){
 			case 'p':{
 				if(!activate){
 					if(cmd > 0) cmd--;
-					else cmd = 5;
+					else cmd = 11;
 					UART0_send(cmd + '0');
 				}
 				break;

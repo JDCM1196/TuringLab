@@ -23,14 +23,18 @@
 #define			WAITO     3				//está cerrado
 
 #define			POWER     0
-#define			POINT     1
+#define			HOOK      1
 #define			PINCH     2
-#define			HOOK      3
+#define			POINT     3
 #define			LATERAL   4
 #define			PEACE     5
-#define 		REST      6
-#define		  NOTPOINT  7
-#define			ROCK			8
+#define 		ROCK      6
+#define		  TWO			  7
+#define			THREE			8
+#define			FOUR			9
+#define			FANCY			10
+#define			INDEX			11
+#define			REST			12
 
 typedef struct finger{
 	uint8_t state;
