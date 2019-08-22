@@ -1,0 +1,216 @@
+/* Universidad Galileo
+ * Turing Research Lab
+ * Julio E. Fajardo
+ * Galileo Bionic Hand
+ * CMSIS-DSP Application
+ * Embedded Prostheses Controller
+ * May-09-2017
+ * drivers.c
+ */
+
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include "MK20D7.h"
+#include "drivers.h"
+
+static const uint8_t channel2sc1a[] = {													//arreglo con los pines del ADC
+	5, 14, 8, 9, 13, 12, 6, 7, 15, 4,															//buscar en datasheet el SEx, donde SE es single ended y x es el valor para el arreglo
+	0, 19, 3, 19+128, 26, 18+128, 23,
+	5+192, 5+128, 4+128, 6+128, 7+128, 4+192
+};
+
+//Peripheral Configurations
+void LED_Config(void){
+	SIM->SCGC5 |= SIM_SCGC5_PORTC_MASK; 													//Enable Clock to Port C  
+	PORTC->PCR[5]  = (1<<8);                     									//PTC.5 is GPIO  	
+	PTC->PDOR &= ~(1<<5);																					//iniciar con LED apagado
+	PTC->PDDR |= (1<<5);																					//PTC.5 as Output
+}
+
+void Output_Config(void){
+	SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;
+	SIM->SCGC5 |= SIM_SCGC5_PORTC_MASK;
+	SIM->SCGC5 |= SIM_SCGC5_PORTD_MASK;										
+	PORTC->PCR[2] |= PORT_PCR_MUX(0x01);																//PTC.2 is GPIO -> M1- (terminal negativa del motor)  
+	PORTC->PCR[4] |= PORT_PCR_MUX(0x01);																//PTC.4 is GPIO -> M1+  
+	PORTC->PCR[3] |= PORT_PCR_MUX(0x01);																//PTC.3 is GPIO -> M2-
+	PORTD->PCR[3] |= PORT_PCR_MUX(0x01);																//PTD.3 is GPIO -> M2+
+	PORTD->PCR[4] |= PORT_PCR_MUX(0x01);																//PTD.4 is GPIO -> M3-
+	PORTD->PCR[2] |= PORT_PCR_MUX(0x01);																//PTD.2 is GPIO -> M3+
+	PORTD->PCR[7] |= PORT_PCR_MUX(0x01);																//PTD.7 is GPIO -> M4-
+	PORTA->PCR[13] |= PORT_PCR_MUX(0x01);																//PTA.13 is GPIO -> M4+
+	PORTA->PCR[12] |= PORT_PCR_MUX(0x01);																//PTA.12 is GPIO -> M5-
+	PORTD->PCR[0] |= PORT_PCR_MUX(0x01);																//PTD.0 is GPIO -> M5+
+	PORTD->PCR[6] |= PORT_PCR_MUX(0x01);																//PTD.6 is GPIO -> M6-
+	PORTC->PCR[1] |= PORT_PCR_MUX(0x01);																//PTC.1 is GPIO -> M6+
+
+	PTA->PDDR |= (1<<12)|(1<<13);																				//PTA.12&13 Output
+	PTC->PDDR |= (1<<1)|(1<<2)|(1<<3)|(1<<4);														//PTC.1,2,3&4 as Output 
+	PTD->PDDR |= (1<<0)|(1<<2)|(1<<3)|(1<<4)|(1<<6)|(1<<7);							//PTD.0,2,3,4,6&7 as Output
+}
+/*
+void Switch_Config(void){
+	SIM->SCGC5 |= SIM_SCGC5_PORTC_MASK;						
+  PORTC->PCR[6] |= PORT_PCR_IRQC(0x09) + PORT_PCR_MUX(0x01) + PORT_PCR_PE_MASK;	//PTC.6 es el 11 //interrupt on rising edge, PTC.6 como GPIO y port enable
+	//PORTC->PCR[6] |= PORT_PCR_PFE_MASK;											//passive low pass filter enable 
+	PORTC->PCR[6] &= ~(PORT_PCR_PS_MASK);											//pull down
+	PORTC->PCR[7] |= PORT_PCR_IRQC(0x09) + PORT_PCR_MUX(0x01) + PORT_PCR_PE_MASK;	//PTC.7 es el 12 
+	//PORTC->PCR[7] |= PORT_PCR_PFE_MASK;
+	PORTC->PCR[7] &= ~(PORT_PCR_PS_MASK);
+	PTC->PDDR &= ~(0 << 6);															//Setting the bit 6 of the port C as Input
+	PTC->PDDR &= ~(0 << 7);															//Setting the bit 7 of the port C as Input
+	PORTC->ISFR = PORT_ISFR_ISF(0xC0); 	  											//Clear interrupt status flag 
+	NVIC_EnableIRQ(PORTC_IRQn);		
+}*/
+
+//Ref 3.3V
+void ADC0_Config(void){
+	SIM->SCGC6 |= SIM_SCGC6_ADC0_MASK;
+	ADC0->CFG1 = ADC_CFG1_MODE(1) + ADC_CFG1_ADLSMP_MASK + ADC_CFG1_ADICLK(0);  	//12 bit - short sample - 12 bits - Bus clk
+	ADC0->CFG2 = ADC_CFG2_MUXSEL_MASK + ADC_CFG2_ADLSTS(2); 						//High Speed, ADCB - Clk enable
+	ADC0->SC2 = 0x00;																//Software trigger
+	ADC0->SC3 = ADC_SC3_ADCO_MASK + ADC_SC3_AVGE_MASK + ADC_SC3_AVGS(2);			//Continuos conversions - Hardware Average - 16 samples
+	ADC0->CV1 = 0x00;																//Compare value not used
+	ADC0->CV2 = 0x00;																//Compare value not used
+	ADC0->OFS = 0x04;																//Offset value
+}
+
+//Ya no se está utilizando el PWM
+/*void FTM0_Config(void){
+  SIM->SCGC6 |= SIM_SCGC6_FTM0_MASK;
+	FTM0->MODE |= FTM_MODE_WPDIS_MASK + FTM_MODE_INIT_MASK;														//Write protection disable   
+	FTM0->CONTROLS[0].CnSC = FTM_CnSC_CHIE_MASK+FTM_CnSC_MSB_MASK+FTM_CnSC_ELSB_MASK; //C0 Edge Align PWM High True
+	FTM0->CONTROLS[1].CnSC = FTM_CnSC_CHIE_MASK+FTM_CnSC_MSB_MASK+FTM_CnSC_ELSB_MASK;	//C1 Edge Align PWM High True
+	FTM0->CONTROLS[2].CnSC = FTM_CnSC_CHIE_MASK+FTM_CnSC_MSB_MASK+FTM_CnSC_ELSB_MASK; //C2 Edge Align PWM High True
+	FTM0->CONTROLS[3].CnSC = FTM_CnSC_CHIE_MASK+FTM_CnSC_MSB_MASK+FTM_CnSC_ELSB_MASK;	//C3 Edge Align PWM High True
+	FTM0->CONTROLS[4].CnSC = FTM_CnSC_CHIE_MASK+FTM_CnSC_MSB_MASK+FTM_CnSC_ELSB_MASK; //C4 Edge Align PWM High True
+	FTM0->CONTROLS[5].CnSC = FTM_CnSC_CHIE_MASK+FTM_CnSC_MSB_MASK+FTM_CnSC_ELSB_MASK;	//C5 Edge Align PWM High True
+	FTM0->CONTROLS[0].CnV = FTM_CnV_VAL(1125);																				//C0V = 1125 - 0.5 ms
+	FTM0->CONTROLS[1].CnV = FTM_CnV_VAL(1125);																				//C1V = 1125 - 0.5 ms, 562, 1687, 0 , 2250
+	FTM0->CONTROLS[2].CnV = FTM_CnV_VAL(1125);																				//C2V = 1125 - 0.5 ms
+	FTM0->CONTROLS[3].CnV = FTM_CnV_VAL(1125);																				//C3V = 1125 - 0.5 ms
+	FTM0->CONTROLS[4].CnV = FTM_CnV_VAL(1125);																				//C4V = 1125 - 0.5 ms
+	FTM0->CONTROLS[5].CnV = FTM_CnV_VAL(1125);																				//C5V = 1125 - 0.5 ms/
+	FTM0->MOD = FTM_MOD_MOD(2250);																							  		//2250*(1/(72MHz/2/16)) = 1 ms
+	FTM0->SC = FTM_SC_TOIE_MASK + FTM_SC_CLKS(0x01) + FTM_SC_PS(0x04);								//System Clock/16							 
+	NVIC_EnableIRQ(FTM0_IRQn);
+}*/
+
+//UART para la pantalla
+void UART0_Config(void){
+	SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
+	SIM->SCGC4 |= SIM_SCGC4_UART0_MASK; 
+	PORTB->PCR[16] = (PORT_PCR_PE_MASK | PORT_PCR_PS_MASK | PORT_PCR_PFE_MASK | PORT_PCR_MUX(3));		//port enable, pull up, passive filter, 
+	PORTB->PCR[17] = (PORT_PCR_DSE_MASK  | PORT_PCR_SRE_MASK | PORT_PCR_MUX(3));
+	UART0->C2 &= (uint8_t)~(uint8_t)((UART_C2_TE_MASK | UART_C2_RE_MASK));
+	UART0->BDH = UART_BDH_SBR(0x00);																	// 115200 Bauds	
+	UART0->BDL = UART_BDL_SBR(0x27);																	//Uses system clock (72MHz)
+	UART0->C4 = UART_C4_BRFA(0x02);				
+	UART0->C1 = UART_C1_ILT_MASK;
+	//UART0->TWFIFO = 2; 																				// tx watermark, causes S1_TDRE to set
+	//UART0->RWFIFO = 2; 																				// rx watermark, causes S1_RDRF to set
+	//UART0->PFIFO = UART_PFIFO_TXFE_MASK | UART_PFIFO_RXFE_MASK;
+	UART0->C2 = (UART_C2_RIE_MASK | UART_C2_TE_MASK | UART_C2_RE_MASK);
+	NVIC_EnableIRQ(UART0_RX_TX_IRQn);			
+}
+
+//UART para la comunicación del MYO
+void UART1_Config(void){
+	SIM->SCGC5 |= SIM_SCGC5_PORTE_MASK;
+	SIM->SCGC4 |= SIM_SCGC4_UART1_MASK; 
+	PORTE->PCR[1] = (PORT_PCR_PE_MASK | PORT_PCR_PS_MASK | PORT_PCR_PFE_MASK | PORT_PCR_MUX(3));
+	PORTE->PCR[0] = (PORT_PCR_DSE_MASK  | PORT_PCR_SRE_MASK | PORT_PCR_MUX(3));
+	UART1->C2 &= (uint8_t)~(uint8_t)((UART_C2_TE_MASK | UART_C2_RE_MASK));
+	UART1->BDH = UART_BDH_SBR(0x00);																	//Uses system clock (72 MHz)
+	UART1->BDL = UART_BDL_SBR(0x27);																	//115200 bauds - 0x27
+	UART1->C4 = UART_C4_BRFA(0x02);																		//115200 bauds - 0x02																										
+	UART1->C1 = UART_C1_ILT_MASK;
+	//UART1->TWFIFO = 2; 																				// tx watermark, causes S1_TDRE to set
+	//UART1->RWFIFO = 2; 																				// rx watermark, causes S1_RDRF to set
+	//UART1->PFIFO = UART_PFIFO_TXFE_MASK | UART_PFIFO_RXFE_MASK
+	UART1->C2 = (UART_C2_RIE_MASK | UART_C2_TE_MASK | UART_C2_RE_MASK);
+	NVIC_EnableIRQ(UART1_RX_TX_IRQn);			
+}
+	
+//Methods
+void LED_On(void){
+	PTC->PSOR |= (1UL<<5);									//on del puerto
+}
+
+void LED_Off(void){
+	PTC->PCOR |= (1UL<<5);									//clear del puerto
+}
+
+void LED_Toggle(void){
+	PTC->PTOR |= (1UL<<5);									//toggle del puerto
+}
+
+uint16_t ADC0_Read(unsigned int index){
+	uint8_t channel = channel2sc1a[index];
+	ADC0->SC1[0] = ADC_SC1_ADCH(channel);   				//single-ended ADC conversion
+	while(!(ADC0->SC1[0] & ADC_SC1_COCO_MASK));				//mientras no se haya cambiado la flag de conversion complete, iterar
+	return ADC0->R[0];
+}
+
+void UART0_send(char dato){
+	while (!((UART0->S1) & (UART_S1_TDRE_MASK)));  			//verificar que el buffer del UART no esté lleno
+	UART0->D = dato;
+}
+
+void UART0_putString(char *mystring){
+	while(*mystring){
+		UART0_send(*mystring);
+		mystring++;
+	}
+}
+
+void UART1_send(char dato){
+	while (!((UART1->S1) & (UART_S1_TDRE_MASK)));  
+	UART1->D = dato;
+}
+
+void UART1_putString(char *mystring){
+	while(*mystring){
+		UART1_send(*mystring);
+		mystring++;
+	}
+}
+
+void PIT_Init(uint32_t frequency){
+	SIM->SCGC6 |= SIM_SCGC6_PIT_MASK;
+	PIT->MCR &= ~(PIT_MCR_MDIS_MASK + PIT_MCR_FRZ_MASK);
+	PIT->CHANNEL[0].LDVAL = (SystemCoreClock/2)/frequency;
+	PIT->CHANNEL[0].TCTRL = PIT_TCTRL_TIE_MASK + PIT_TCTRL_TEN_MASK;
+	NVIC_EnableIRQ(PIT0_IRQn);
+}
+
+// Quadrature Decoder Initialization, receives as argument a QuadratureDecoder structure
+void QD_Init(QuaD *QD){
+	SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;
+	SIM->SCGC6 |= SIM_SCGC6_FTM1_MASK;
+	PORTA->PCR[12] |= PORT_PCR_MUX(0x07); 
+	PORTA->PCR[13] |= PORT_PCR_MUX(0x07);
+	FTM1->MODE |= FTM_MODE_WPDIS_MASK;
+	FTM1->QDCTRL |= FTM_QDCTRL_PHAFLTREN_MASK + FTM_QDCTRL_PHBFLTREN_MASK + FTM_QDCTRL_QUADEN_MASK;	
+	FTM1->MOD = 0xFFFF;
+	FTM1->SC = FTM_SC_CLKS(0x01) + FTM_SC_PS(0x00);			//Use system clock, div 1
+	QD->a1 = 0;
+}
+
+// Quadrature Decoder Process, receives as argument a QuadratureDecoder structure, it determines the angular velocity of the motor
+
+void QD_Process(QuaD *QD){
+	volatile int64_t delta;
+	QD->a2 = FTM1->CNT;
+	if(FTM1->SC & FTM_SC_TOF_MASK){		//verificar si hay overflow en el FT
+		FTM1->SC &= ~(FTM_SC_TOF_MASK);
+		delta = QD->a2 - QD->a1;
+		FTM1->CNT = 0;
+	} else{
+		delta = QD->a2 - QD->a1;
+	}
+	QD->omega = (2.0f*PI*delta);			//a.k.a. delta*(2*PI/1ms)
+	QD->a1 = FTM1->CNT?QD->a2:0;
+}
