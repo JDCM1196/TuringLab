@@ -53,8 +53,8 @@ const float32_t L = 1.35f*10E-3;
 const float32_t k = 3.658f*10E-3;
 const float32_t J = 3.823f*10E-12;
 const float32_t G = 248.98f;
-const float32_t r = 0.1f;			//
-const float32_t rp = 0.1f;		//
+const float32_t r = 4.1f*10E-3;
+const float32_t rp = 4.5f*10E-3;
 const float32_t Rs = 3.66f;
 
 //Estados (en orden): theta, omega, corriente
