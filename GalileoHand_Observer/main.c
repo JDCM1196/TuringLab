@@ -34,7 +34,7 @@
 #include "drivers.h"
 #include "finger.h"
 
-fingers middle_f =  {WAITC,3,0,0,0,62};
+fingers middle_f =  {WAITC, 3, 0, 0, 0, 62};
 
 uint32_t ticks = 0;                                                         // 1 ms ticks
 															
@@ -42,8 +42,9 @@ QuaD QD;
 volatile float32_t w = 0;
 float32_t V = 0;
 float32_t I = 0;	
-char stringOmega[30];
-char stringV[30];	
+float32_t t = 0;
+float32_t theta = 0;
+
 char command[30]; 
 
 //Inicialización de las matrices de estado
@@ -54,6 +55,7 @@ const float32_t J = 3.823f*10E-12;
 const float32_t G = 248.98f;
 const float32_t r = 0.1f;			//
 const float32_t rp = 0.1f;		//
+const float32_t Rs = 3.66f;
 
 //Estados (en orden): theta, omega, corriente
 float32_t A[3][3] = {0,	1,	0,
@@ -84,7 +86,7 @@ int main(void){
 	UART1_Config();
   Output_Config();
   SysTick_Config(SystemCoreClock/100);
-  PIT_Init(12);
+  PIT_Init(24);
 
   arm_fill_q15(0, middle_f.buffer, SIZE);
 
@@ -93,33 +95,31 @@ int main(void){
 	LED_On();
 	
 	while(1){
-		if(w != QD.omega){
+		/*if(w != QD.omega){
 			sprintf(command, "omega: %f\n\r", QD.omega);
-			//UART0_putString(command);
-  	}
+			UART0_putString(command);
+  	}*/
 	}
 }
 void SysTick_Handler(void) {
-  //LED_On();		
 	V = ADC0_Read(4)*3.3f/1024.0f;
-	I = V/3.66f;
-	sprintf(stringV, "%.2f,%.4f,%.2f\r", V,I,QD.omega);
-	UART0_putString(stringV);
-	//sprintf(stringOmega, "w: %.4f\n\r", QD.omega);
-	//UART0_putString(stringOmega);
+	I = V/Rs;
+	theta = FTM1->CNT*PI/(G*6);
+	
+	sprintf(command, "%.2f,%.4f,%.2f,%.2f\r", V, I, QD.omega, theta);
+	UART0_putString(command);
 	
 	Finger_Timing(&middle_f);
 	ticks++; 
-  //LED_Off();
 }
 
 
 void PIT0_IRQHandler(){
-	char string[50];
+	//char string[50];
   PIT->CHANNEL[0].TFLG |= PIT_TFLG_TIF_MASK;
 	QD_Process(&QD);
 	//sprintf(string, "w: %.4f\n\r", QD.omega);
 	//UART0_putString(string);
 	w = QD.omega;
-	LED_Toggle();
+	//LED_Toggle();
 }
