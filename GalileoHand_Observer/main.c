@@ -81,7 +81,7 @@ arm_matrix_instance_f32 y;
 float32_t y_f32[1][1] = {0};
 
 arm_matrix_instance_f32 I;
-
+float32_t I_f32[1][1];
 //Matrices del sistema (ya discretizadas)
 arm_matrix_instance_f32 A;
 float32_t A_f32[3][3] = {1,	9.9993E-6,	0.3856,
@@ -125,16 +125,30 @@ int main(void){
 	Finger_Open(middle_f.finger_m);
 	
 	while(1){
-		/*if(w != QD.omega){
-			sprintf(command, "omega: %f\n\r", QD.omega);
-			UART0_putString(command);
-  	}*/
+		arm_mat_init_f32(&x, 3, 1, (float32_t *)x_f32);
+		arm_mat_init_f32(&xb, 3, 1, (float32_t *)xb_f32);
+		arm_mat_init_f32(&xh, 3, 1, (float32_t *)xh_f32);	
+		arm_mat_init_f32(&I, 1, 1, (float32_t *)I_f32);	
+		
+		//xb = Ax+B(11.77-I*R-L(I-Iant)/SysTickFreq)
+		arm_mat_mult_f32(&A, &x, &xb);
+		arm_mat_scale_f32(&B, 11.77 - In*R - L*(In-Ib)/SysTickFreq, &B);
+		arm_mat_add_f32(&xb, &B, &xb);
+		
+		//y = Cx
+		arm_mat_mult_f32(&C, &x, &y);
+		
+		//xh = xb-LG(y+I)
+		arm_mat_add_f32(&y, &I, &y);
+		arm_mat_mult_f32(&y, &LG, &xh);
+		arm_mat_scale_f32(&xh, -1, &xh);
+		arm_mat_add_f32(&xb, &xh, &xh);
 	}
 }
 void SysTick_Handler(void) {
 	V = ADC0_Read(4)*3.3f/1024.0f;
 	In = V/Rs;
-	float32_t I_f32[1][1] = {In};
+	I_f32[0][0] = In;
 	theta = FTM1->CNT*PI/(G*6.0f);
 	omegaG = QD.omega/G;
 	
@@ -144,25 +158,6 @@ void SysTick_Handler(void) {
 	
 	sprintf(command, "%.2f,%.4f,%.2f,%.2f\r", V, In, omegaG, theta);
 	UART0_putString(command);
-
-	arm_mat_init_f32(&x, 3, 1, (float32_t *)x_f32);
-	arm_mat_init_f32(&xb, 3, 1, (float32_t *)xb_f32);
-	arm_mat_init_f32(&xh, 3, 1, (float32_t *)xh_f32);	
-	arm_mat_init_f32(&I, 1, 1, (float32_t *)I_f32);	
-	
-	//xb = Ax+B(11.77-I*R-L(I-Iant)/SysTickFreq)
-	arm_mat_mult_f32(&A, &x, &xb);
-	arm_mat_scale_f32(&B, 11.77 - In*R - L*(In-Ib)/SysTickFreq, &B);
-	arm_mat_add_f32(&xb, &B, &xb);
-	
-	//y = Cx
-	arm_mat_mult_f32(&C, &x, &y);
-	
-	//xh = xb-LG(y+I)
-	arm_mat_add_f32(&y, &I, &y);
-	arm_mat_mult_f32(&y, &LG, &xh);
-	arm_mat_scale_f32(&xh, -1, &xh);
-	arm_mat_add_f32(&xb, &xh, &xh);
 
 	Ib = In;
 	Finger_Timing(&middle_f);
